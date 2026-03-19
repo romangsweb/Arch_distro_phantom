@@ -19,12 +19,12 @@ jobs:
       - name: Build ISO using Arch Linux Docker
         run: |
           # Usamos un contenedor privilegiado de Arch Linux en los servidores de GitHub
-          # para correr nuestro script build-iso.sh
+          # Inicializamos el keyring de pacman primero, típicamente obsoleto en la imagen Docker
           docker run --rm --privileged \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
             archlinux:latest \
-            /bin/bash -c "pacman -Syu --noconfirm && bash iso-builder/build-iso.sh"
+            /bin/bash -c "pacman-key --init && pacman-key --populate archlinux && pacman -Sy archlinux-keyring --noconfirm && pacman -Su --noconfirm && bash iso-builder/build-iso.sh"
 
       - name: List built files
         run: ls -lh iso-builder/out/

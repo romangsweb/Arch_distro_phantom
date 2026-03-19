@@ -138,47 +138,30 @@ procs
 sd
 choose
 hyperfine
-tokei
-bandwhich
-dog
-gping
-curlie
-xh
-zoxide
-
 # Development
 neovim
 git
 git-delta
 python
 python-pip
-python-virtualenv
 go
 rust
 nodejs
 npm
 docker
 docker-compose
-podman
 kubectl
-k9s
-terraform
-ansible
-python-pynvim
 
 # Files + Media
 thunar
 gvfs
-imv
 mpv
-cava
 
 # Apps
 firefox
 libreoffice-fresh
 gimp
 zathura
-zathura-pdf-mupdf
 transmission-gtk
 keepassxc
 obs-studio
@@ -187,8 +170,6 @@ gnome-calculator
 
 # System
 greetd
-greetd-tuigreet
-plymouth
 nftables
 fail2ban
 reflector
@@ -203,7 +184,6 @@ wireplumber
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
-ttf-jetbrains-mono-nerd
 papirus-icon-theme
 gnome-themes-extra
 syncthing
