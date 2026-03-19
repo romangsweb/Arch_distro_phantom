@@ -72,7 +72,6 @@ cat >> "$PROFILE_DIR/packages.x86_64" << 'PACKAGES'
 
 # ── PHANTOM RICE PACKAGES ────────────────────────────────
 # MacBook A1706 hardware
-broadcom-wl-dkms
 libinput
 mesa
 intel-media-driver
