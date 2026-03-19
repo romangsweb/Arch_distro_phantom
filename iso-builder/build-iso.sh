@@ -230,6 +230,7 @@ info() { echo -e "${PURPLE}   ▸${NC} $1"; }
 warn() { echo -e "${RED}   ⚠${NC} $1"; }
 ask()  { echo -ne "${GREEN}   ?${NC} $1: "; }
 
+clear
 echo -e "
 ${GREEN}███████╗██╗  ██╗ █████╗ ███╗   ██╗████████╗ ██████╗ ███╗   ███╗${NC}
 ${GREEN}██╔══██║██║  ██║██╔══██╗████╗  ██║╚══██╔══╝██╔═══██╗████╗ ████║${NC}
@@ -279,7 +280,8 @@ ask "Latitud (ej: 19.43)"; read -r USER_LAT
 ask "Longitud (ej: -99.13)"; read -r USER_LON
 
 # ── Disk selection ──────────────────────────────────────────
-echo -e "\n${PURPLE}Discos disponibles:${NC}"
+clear
+echo -e "\n${PURPLE}Discos disponibles para instalar:${NC}"
 lsblk -d -o NAME,SIZE,TYPE,MODEL | grep -E "disk"
 echo ""
 ask "Disco para instalar (ej: /dev/nvme0n1 o /dev/sda)"; read -r DISK
