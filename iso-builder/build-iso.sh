@@ -500,6 +500,12 @@ sed -i 's/iso_name="archlinux"/iso_name="phantom-archlinux"/' "$PROFILE_DIR/prof
 sed -i 's/iso_label="ARCH_/iso_label="PHANTOM_/' "$PROFILE_DIR/profiledef.sh"
 sed -i "s/iso_version=.*/iso_version=\"$(date +%Y.%m.%d)\"/" "$PROFILE_DIR/profiledef.sh"
 
+# Add executable permissions for our custom scripts in the ISO
+cat >> "$PROFILE_DIR/profiledef.sh" << 'EOF'
+file_permissions+=([\"/root/phantom-install.sh\"]=\"0:0:755\")
+file_permissions+=([\"/usr/local/bin/phantom-install\"]=\"0:0:755\")
+EOF
+
 log "ISO metadata customized"
 
 # ══════════════════════════════════════════════════════════════════
