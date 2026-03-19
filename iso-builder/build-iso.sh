@@ -62,10 +62,10 @@ cp -r /usr/share/archiso/configs/releng "$PROFILE_DIR"
 log "Base profile copied"
 
 # ── Remove conflicting packages from the base profile ───────────
-# The releng profile includes broadcom-wl which conflicts with dkms version
-info "Cleaning base package conflicts..."
-sed -i '/^broadcom-wl$/d' "$PROFILE_DIR/packages.x86_64"
-log "Removed conflicting broadcom-wl from base profile"
+# NOTE: The base releng profile already includes broadcom-wl (pre-compiled)
+# which is needed for WiFi during the live USB install on MacBooks.
+# broadcom-wl-dkms will be installed on the TARGET system by install.sh
+# (they conflict, so we can only have one at a time).
 
 # ── Add Phantom packages to the ISO ─────────────────────────────
 info "Adding Phantom packages..."
@@ -73,8 +73,7 @@ info "Adding Phantom packages..."
 cat >> "$PROFILE_DIR/packages.x86_64" << 'PACKAGES'
 
 # ── PHANTOM RICE ─────────────────────────────────────
-# MacBook A1706 hardware
-broadcom-wl-dkms
+# MacBook A1706 hardware (broadcom-wl already in base profile)
 libinput
 mesa
 intel-media-driver

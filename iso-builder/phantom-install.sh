@@ -103,17 +103,37 @@ if ping -c 1 -W 3 archlinux.org &>/dev/null; then
     log "Conectado a Internet"
 else
     warn "Sin conexión a Internet"
-    info "Conectando WiFi..."
+    info "Preparando WiFi (MacBook Broadcom)..."
     echo ""
 
-    # List available WiFi networks
+    # Load Broadcom WiFi driver (critical for MacBook A1706)
+    info "Cargando driver Broadcom..."
+    modprobe -r b43 bcma ssb wl 2>/dev/null || true
+    modprobe wl 2>/dev/null || warn "No se pudo cargar módulo wl"
+    sleep 2
+
+    # Unblock WiFi if hardware/software blocked
+    rfkill unblock wifi 2>/dev/null || true
+    sleep 1
+
+    # Start iwd if not running
+    systemctl start iwd 2>/dev/null || true
+    sleep 1
+
     if command -v iwctl &>/dev/null; then
-        # Get the WiFi device name
-        WIFI_DEV=$(iwctl device list 2>/dev/null | grep station | awk '{print $2}' | head -1)
+        # Try to find WiFi device (retry a few times)
+        WIFI_DEV=""
+        for attempt in 1 2 3; do
+            WIFI_DEV=$(iwctl device list 2>/dev/null | awk '/station/{print $2}' | head -1)
+            [[ -n "$WIFI_DEV" ]] && break
+            info "Buscando dispositivo WiFi... intento $attempt/3"
+            sleep 2
+        done
+
         if [[ -n "$WIFI_DEV" ]]; then
             info "Dispositivo WiFi: $WIFI_DEV"
             iwctl station "$WIFI_DEV" scan 2>/dev/null
-            sleep 2
+            sleep 3
             echo -e "\n${PURPLE}   Redes disponibles:${NC}"
             iwctl station "$WIFI_DEV" get-networks 2>/dev/null | head -15
             echo ""
@@ -122,15 +142,42 @@ else
             echo ""
 
             iwctl --passphrase "$WIFI_PASS" station "$WIFI_DEV" connect "$WIFI_SSID" 2>/dev/null
-            sleep 3
+            sleep 5
 
-            if ping -c 1 -W 3 archlinux.org &>/dev/null; then
+            if ping -c 1 -W 5 archlinux.org &>/dev/null; then
                 log "Conectado a $WIFI_SSID"
             else
-                die "No se pudo conectar al WiFi. Verifica SSID/password."
+                warn "No se conectó con iwctl, intentando con wpa_supplicant..."
+                # Fallback: try wpa_supplicant directly
+                WIFI_IFACE=$(ip link | grep -oE 'wlan[0-9]+|wlp[0-9]+s[0-9]+' | head -1)
+                if [[ -n "$WIFI_IFACE" ]]; then
+                    wpa_passphrase "$WIFI_SSID" "$WIFI_PASS" > /tmp/wpa.conf 2>/dev/null
+                    wpa_supplicant -B -i "$WIFI_IFACE" -c /tmp/wpa.conf 2>/dev/null
+                    dhcpcd "$WIFI_IFACE" 2>/dev/null || dhclient "$WIFI_IFACE" 2>/dev/null
+                    sleep 5
+                    if ping -c 1 -W 5 archlinux.org &>/dev/null; then
+                        log "Conectado via wpa_supplicant"
+                    else
+                        die "No se pudo conectar al WiFi. Verifica SSID/password o conecta un cable ethernet/USB."
+                    fi
+                else
+                    die "No se pudo conectar. Conecta un cable ethernet o adaptador USB WiFi."
+                fi
             fi
         else
-            die "No se encontró dispositivo WiFi. Conecta ethernet."
+            warn "No se detectó dispositivo WiFi."
+            echo ""
+            echo -e "   ${PURPLE}Opciones:${NC}"
+            echo -e "   ${DIM}1. Conecta un cable ethernet o adaptador USB WiFi${NC}"
+            echo -e "   ${DIM}2. Usa tu iPhone/Android como hotspot USB${NC}"
+            echo -e "   ${DIM}3. Presiona Ctrl+C, conecta internet, y corre:${NC}"
+            echo -e "   ${GREEN}   bash /root/phantom-install.sh${NC}"
+            echo ""
+            ask "Presiona Enter cuando tengas internet"; read -r _
+            if ! ping -c 1 -W 5 archlinux.org &>/dev/null; then
+                die "Aún sin internet. Revisa tu conexión."
+            fi
+            log "Conectado a Internet"
         fi
     else
         die "iwctl no disponible. Conecta un cable ethernet."
