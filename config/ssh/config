@@ -1,0 +1,66 @@
+# ╔══════════════════════════════════════╗
+# ║  SSH CONFIG — Template                 ║
+# ║  ML Server · Cloud · Dev Hosts         ║
+# ╚══════════════════════════════════════╝
+
+# ── Defaults for all hosts ─────────────────────────────────────
+Host *
+    AddKeysToAgent yes
+    IdentitiesOnly yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+    Compression yes
+    IdentityFile ~/.ssh/id_ed25519
+
+# ── ML Training Server ────────────────────────────────────────
+Host ml-server
+    HostName YOUR_ML_SERVER_IP
+    User YOUR_USERNAME
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519_ml
+    ForwardAgent yes
+    # Tunnel for Jupyter
+    LocalForward 8888 localhost:8888
+    # Tunnel for TensorBoard
+    LocalForward 6006 localhost:6006
+
+# ── Dev Server ─────────────────────────────────────────────────
+Host dev
+    HostName YOUR_DEV_SERVER_IP
+    User YOUR_USERNAME
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519
+
+# ── Cloud Instances ────────────────────────────────────────────
+Host aws-*
+    User ec2-user
+    IdentityFile ~/.ssh/aws_key.pem
+    StrictHostKeyChecking accept-new
+
+Host gcp-*
+    User YOUR_USERNAME
+    IdentityFile ~/.ssh/id_ed25519_gcp
+
+# ── Jump / Bastion Host ───────────────────────────────────────
+Host bastion
+    HostName YOUR_BASTION_IP
+    User YOUR_USERNAME
+    IdentityFile ~/.ssh/id_ed25519
+
+Host internal-*
+    ProxyJump bastion
+
+# ── GitHub ─────────────────────────────────────────────────────
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    PreferredAuthentications publickey
+
+# ── GitLab ─────────────────────────────────────────────────────
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    PreferredAuthentications publickey

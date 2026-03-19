@@ -1,0 +1,83 @@
+# ╔══════════════════════════════════════╗
+# ║  GIT CONFIG — Template                 ║
+# ║  Update name/email after install       ║
+# ╚══════════════════════════════════════╝
+
+[user]
+    name = PHANTOM_USER_NAME
+    email = PHANTOM_USER_EMAIL
+
+[core]
+    editor = nvim
+    pager = delta
+    autocrlf = input
+    whitespace = fix
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[push]
+    autoSetupRemote = true
+    default = current
+
+[fetch]
+    prune = true
+
+[merge]
+    conflictstyle = diff3
+    tool = nvim
+
+[diff]
+    colorMoved = default
+    algorithm = histogram
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    dark = true
+    side-by-side = true
+    line-numbers = true
+    syntax-theme = base16
+    file-style = "bold #7EC8A0"
+    hunk-header-style = "bold #B48EAD"
+    plus-style = "syntax #1a2e1a"
+    minus-style = "syntax #2e1a1a"
+
+[alias]
+    s = status -sb
+    a = add
+    cm = commit -m
+    co = checkout
+    br = branch
+    lg = log --oneline --graph --decorate -20
+    last = log -1 HEAD --stat
+    unstage = reset HEAD --
+    amend = commit --amend --no-edit
+    wip = !git add -A && git commit -m "wip"
+    undo = reset --soft HEAD~1
+    cleanup = !git branch --merged | grep -v '\\*\\|main\\|master' | xargs -n 1 git branch -d
+    contributors = shortlog -sn --no-merges
+
+[credential]
+    helper = store
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+[color]
+    ui = true
+
+[color "branch"]
+    current = "#7EC8A0" bold
+    local = "#d4d4d4"
+    remote = "#B48EAD"
+
+[color "status"]
+    added = "#7EC8A0"
+    changed = "#B48EAD"
+    untracked = "#555555"

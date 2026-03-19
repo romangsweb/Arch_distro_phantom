@@ -1,0 +1,244 @@
+/* ╔══════════════════════════════════════════════════════════════╗ */
+/* ║  WAYBAR STYLE — Flat Minimal (Green/Purple · Phantom)         ║ */
+/* ║  Solid panels, clean lines, no glass, no frills                ║ */
+/* ╚══════════════════════════════════════════════════════════════╝ */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* ── Bar — Solid Dark ──────────────────────────────────────────── */
+window#waybar {
+    background: transparent;
+    color: #d4d4d4;
+}
+
+tooltip {
+    background: #141414;
+    border: 1px solid #1e1e1e;
+    border-radius: 4px;
+    color: #d4d4d4;
+    padding: 6px 10px;
+}
+
+tooltip label {
+    color: #d4d4d4;
+    font-size: 11px;
+}
+
+/* ── Capsule Endpoints ─────────────────────────────────────────── */
+#custom-l_end {
+    border-radius: 4px 0 0 4px;
+    background: #141414;
+    border-left: 1px solid #1e1e1e;
+    border-top: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+    padding-left: 2px;
+    margin-left: 3px;
+    font-size: 1px;
+    min-width: 4px;
+}
+
+#custom-r_end {
+    border-radius: 0 4px 4px 0;
+    background: #141414;
+    border-right: 1px solid #1e1e1e;
+    border-top: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+    padding-right: 2px;
+    margin-right: 3px;
+    font-size: 1px;
+    min-width: 4px;
+}
+
+#custom-separator {
+    color: #1e1e1e;
+    background: #141414;
+    border-top: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+    padding: 0 1px;
+    font-size: 11px;
+}
+
+#custom-spacer {
+    background: transparent;
+    min-width: 2px;
+    padding: 0;
+}
+
+/* ── Common Module — Solid Background ──────────────────────────── */
+#custom-arch_logo,
+#workspaces,
+#window,
+#clock,
+#cpu,
+#memory,
+#temperature,
+#custom-gpu,
+#battery,
+#network,
+#pulseaudio,
+#tray {
+    background: #141414;
+    border-top: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+    padding: 0 8px;
+    color: #808080;
+}
+
+/* ── Arch Logo ─────────────────────────────────────────────────── */
+#custom-arch_logo {
+    color: #7EC8A0;
+    font-size: 14px;
+    padding: 0 10px 0 4px;
+}
+
+/* ── Workspaces ────────────────────────────────────────────────── */
+#workspaces button {
+    padding: 0 5px;
+    color: #555555;
+    background: transparent;
+    border: none;
+    border-radius: 2px;
+    margin: 4px 1px;
+    min-width: 20px;
+    transition: all 0.15s ease;
+}
+
+#workspaces button:hover {
+    color: #d4d4d4;
+    background: #1e1e1e;
+}
+
+#workspaces button.active {
+    color: #0a0a0a;
+    background: #7EC8A0;
+    font-weight: 700;
+}
+
+#workspaces button.urgent {
+    color: #0a0a0a;
+    background: #BF616A;
+}
+
+/* ── Window Title ──────────────────────────────────────────────── */
+#window {
+    color: #555555;
+    font-size: 11px;
+    padding: 0 12px;
+}
+
+/* ── Clock ─────────────────────────────────────────────────────── */
+#clock {
+    color: #d4d4d4;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 0 14px;
+}
+
+/* ── CPU ────────────────────────────────────────────────────────── */
+#cpu {
+    color: #808080;
+}
+
+#cpu.warning {
+    color: #B48EAD;
+}
+
+#cpu.critical {
+    color: #BF616A;
+}
+
+/* ── Memory ────────────────────────────────────────────────────── */
+#memory {
+    color: #808080;
+}
+
+#memory.warning {
+    color: #B48EAD;
+}
+
+#memory.critical {
+    color: #BF616A;
+}
+
+/* ── Temperature ───────────────────────────────────────────────── */
+#temperature {
+    color: #808080;
+}
+
+#temperature.critical {
+    color: #BF616A;
+}
+
+/* ── GPU ────────────────────────────────────────────────────────── */
+#custom-gpu {
+    color: #B48EAD;
+}
+
+/* ── Battery ───────────────────────────────────────────────────── */
+#battery {
+    color: #808080;
+}
+
+#battery.full,
+#battery.good {
+    color: #7EC8A0;
+}
+
+#battery.warning {
+    color: #B48EAD;
+}
+
+#battery.critical:not(.charging) {
+    color: #BF616A;
+}
+
+#battery.charging {
+    color: #7EC8A0;
+}
+
+/* ── Network ───────────────────────────────────────────────────── */
+#network {
+    color: #808080;
+}
+
+#network.disconnected {
+    color: #555555;
+}
+
+/* ── Audio ──────────────────────────────────────────────────────── */
+#pulseaudio {
+    color: #808080;
+}
+
+#pulseaudio.muted {
+    color: #555555;
+}
+
+/* ── Tray ──────────────────────────────────────────────────────── */
+#tray {
+    padding: 0 6px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+/* ── Hover — Quiet Highlight ───────────────────────────────────── */
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#custom-gpu:hover,
+#battery:hover,
+#network:hover,
+#pulseaudio:hover {
+    color: #7EC8A0;
+}

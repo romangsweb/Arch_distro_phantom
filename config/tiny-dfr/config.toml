@@ -1,0 +1,164 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║  TINY-DFR — Touch Bar Configuration (MacBook Pro A1706)     ║
+# ║  Phantom Rice · Maximum Customization                        ║
+# ╚══════════════════════════════════════════════════════════════╝
+#
+# ┌────────────────────────────────────────────────────────────┐
+# │  WHAT THE TOUCH BAR CAN DO ON LINUX:                       │
+# │                                                            │
+# │  ✓ Custom button layouts (primary + media layers)          │
+# │  ✓ Text labels, icons (SVG), live clock                    │
+# │  ✓ Wide/stretched buttons                                  │
+# │  ✓ Adaptive brightness (follows screen)                    │
+# │  ✓ Fn key toggle between layers                            │
+# │  ✓ Custom fonts                                            │
+# │  ✓ Hardware Esc key (always available)                     │
+# │                                                            │
+# │  ✗ No arbitrary apps/widgets (it's a button bar, not a     │
+# │    display — unlike macOS which renders arbitrary views)    │
+# │  ✗ No sliders (brightness/volume are layer-based buttons)  │
+# │  ✗ No touch gestures beyond tap                            │
+# └────────────────────────────────────────────────────────────┘
+
+# ── Display Settings ────────────────────────────────────────────
+# Show media keys by default (Fn key switches to F-keys)
+MediaLayerDefault = true
+
+# Show thin outlines around buttons
+ShowButtonOutlines = true
+
+# Slow pixel shift to prevent OLED burn-in
+EnablePixelShift = true
+
+# Use JetBrainsMono for labels
+FontTemplate = "JetBrainsMono Nerd Font 11"
+
+# Brightness follows the main display
+AdaptiveBrightness = true
+
+# Max brightness when adaptive is off (0-255)
+ActiveBrightness = 180
+
+# ── Primary Layer (Fn held) — Function Keys ────────────────────
+# Standard F-keys for when you need them
+[[PrimaryLayerKeys]]
+Text = "F1"
+Action = "F1"
+
+[[PrimaryLayerKeys]]
+Text = "F2"
+Action = "F2"
+
+[[PrimaryLayerKeys]]
+Text = "F3"
+Action = "F3"
+
+[[PrimaryLayerKeys]]
+Text = "F4"
+Action = "F4"
+
+[[PrimaryLayerKeys]]
+Text = "F5"
+Action = "F5"
+
+[[PrimaryLayerKeys]]
+Text = "F6"
+Action = "F6"
+
+[[PrimaryLayerKeys]]
+Text = "F7"
+Action = "F7"
+
+[[PrimaryLayerKeys]]
+Text = "F8"
+Action = "F8"
+
+[[PrimaryLayerKeys]]
+Text = "F9"
+Action = "F9"
+
+[[PrimaryLayerKeys]]
+Text = "F10"
+Action = "F10"
+
+[[PrimaryLayerKeys]]
+Text = "F11"
+Action = "F11"
+
+[[PrimaryLayerKeys]]
+Text = "F12"
+Action = "F12"
+
+# Insert & Delete (bonus keys on primary layer)
+[[PrimaryLayerKeys]]
+Text = "Ins"
+Action = "Insert"
+
+[[PrimaryLayerKeys]]
+Text = "Del"
+Action = "Delete"
+
+# ── Media Layer (Default) — Daily Controls ──────────────────────
+# This is what you see by default
+# Layout: [☀↓] [☀↑] [  ] [🔍] [🎤] [⏮] [⏯] [⏭] [🔇] [🔉] [🔊] [⏰]
+
+# Brightness down
+[[MediaLayerKeys]]
+Icon = "display-brightness-low-symbolic"
+Action = "BrightnessDown"
+
+# Brightness up
+[[MediaLayerKeys]]
+Icon = "display-brightness-high-symbolic"
+Action = "BrightnessUp"
+
+# Mission Control / Overview (mapped to Super for Hyprland overview)
+[[MediaLayerKeys]]
+Icon = "view-grid-symbolic"
+Action = "Super_L"
+
+# Search / Rofi launcher (Super+D equivalent)
+[[MediaLayerKeys]]
+Icon = "edit-find-symbolic"
+Action = "LaunchA"
+
+# Microphone mute toggle
+[[MediaLayerKeys]]
+Icon = "microphone-sensitivity-muted-symbolic"
+Action = "MicMute"
+
+# Media: Previous
+[[MediaLayerKeys]]
+Icon = "media-skip-backward-symbolic"
+Action = "PreviousSong"
+
+# Media: Play/Pause (wider button)
+[[MediaLayerKeys]]
+Icon = "media-playback-start-symbolic"
+Action = "PlayPause"
+Stretch = 1.5
+
+# Media: Next
+[[MediaLayerKeys]]
+Icon = "media-skip-forward-symbolic"
+Action = "NextSong"
+
+# Volume: Mute
+[[MediaLayerKeys]]
+Icon = "audio-volume-muted-symbolic"
+Action = "Mute"
+
+# Volume: Down
+[[MediaLayerKeys]]
+Icon = "audio-volume-low-symbolic"
+Action = "VolumeDown"
+
+# Volume: Up
+[[MediaLayerKeys]]
+Icon = "audio-volume-high-symbolic"
+Action = "VolumeUp"
+
+# Live clock (auto-updating, wider)
+[[MediaLayerKeys]]
+Time = "%H:%M"
+Stretch = 1.5

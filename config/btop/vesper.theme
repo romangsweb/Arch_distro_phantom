@@ -1,0 +1,46 @@
+# ╔══════════════════════════════════════╗
+# ║  BTOP — Phantom Dark Theme            ║
+# ║  Green/Purple · Flat                    ║
+# ╚══════════════════════════════════════╝
+
+theme[main_bg]="#0a0a0a"
+theme[main_fg]="#d4d4d4"
+theme[title]="#d4d4d4"
+theme[hi_fg]="#7EC8A0"
+theme[selected_bg]="#1a1a1a"
+theme[selected_fg]="#7EC8A0"
+theme[inactive_fg]="#555555"
+theme[proc_misc]="#B48EAD"
+
+theme[cpu_box]="#1e1e1e"
+theme[mem_box]="#1e1e1e"
+theme[net_box]="#1e1e1e"
+theme[proc_box]="#1e1e1e"
+
+theme[cpu_start]="#7EC8A0"
+theme[cpu_mid]="#7EC8A0"
+theme[cpu_end]="#BF616A"
+
+theme[download_start]="#B48EAD"
+theme[download_mid]="#B48EAD"
+theme[download_end]="#81A1C1"
+
+theme[upload_start]="#81A1C1"
+theme[upload_mid]="#81A1C1"
+theme[upload_end]="#5E81AC"
+
+theme[used_start]="#7EC8A0"
+theme[used_mid]="#D4A76A"
+theme[used_end]="#BF616A"
+
+theme[available_start]="#1a1a1a"
+theme[available_mid]="#1e1e1e"
+theme[available_end]="#252525"
+
+theme[free_start]="#7EC8A0"
+theme[free_mid]="#81A1C1"
+theme[free_end]="#B48EAD"
+
+theme[temp_start]="#7EC8A0"
+theme[temp_mid]="#D4A76A"
+theme[temp_end]="#BF616A"

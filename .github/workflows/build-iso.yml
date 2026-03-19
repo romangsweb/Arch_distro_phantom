@@ -1,0 +1,37 @@
+name: Build Phantom ISO
+
+on:
+  workflow_dispatch: # Permite correrlo manualmente desde GitHub
+  push:
+    tags:
+      - 'v*'       # Correrá automáticamente cuando crees un tag como v1.0
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Necesario para publicar el Release
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build ISO using Arch Linux Docker
+        run: |
+          # Usamos un contenedor privilegiado de Arch Linux en los servidores de GitHub
+          # para correr nuestro script build-iso.sh
+          docker run --rm --privileged \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            archlinux:latest \
+            /bin/bash -c "pacman -Syu --noconfirm && bash iso-builder/build-iso.sh"
+
+      - name: List built files
+        run: ls -lh iso-builder/out/
+
+      - name: Upload ISO as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Phantom-ArchLinux-ISO
+          path: iso-builder/out/*.iso
+          retention-days: 3

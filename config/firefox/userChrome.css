@@ -1,0 +1,159 @@
+/* ╔══════════════════════════════════════════════════════════════╗ */
+/* ║  FIREFOX — userChrome.css (Phantom Flat Minimal)              ║ */
+/* ║  Custom browser chrome matching the desktop theme             ║ */
+/* ╚══════════════════════════════════════════════════════════════╝ */
+
+/* ── Root Variables ─────────────────────────────────────────────── */
+:root {
+    --phantom-bg: #0a0a0a;
+    --phantom-surface: #141414;
+    --phantom-border: #1e1e1e;
+    --phantom-text: #d4d4d4;
+    --phantom-dim: #555555;
+    --phantom-green: #7EC8A0;
+    --phantom-purple: #B48EAD;
+    --phantom-red: #BF616A;
+
+    /* Firefox internal overrides */
+    --toolbar-bgcolor: var(--phantom-surface) !important;
+    --toolbar-color: var(--phantom-text) !important;
+    --lwt-toolbar-body-text: var(--phantom-text) !important;
+    --tab-min-height: 32px !important;
+}
+
+/* ── Tab Bar ────────────────────────────────────────────────────── */
+#TabsToolbar {
+    background: var(--phantom-bg) !important;
+    border-bottom: 1px solid var(--phantom-border) !important;
+}
+
+/* Individual tabs */
+.tabbrowser-tab {
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.tabbrowser-tab .tab-background {
+    background: var(--phantom-bg) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+.tabbrowser-tab[selected] .tab-background {
+    background: var(--phantom-surface) !important;
+    border-bottom: 2px solid var(--phantom-green) !important;
+}
+
+.tabbrowser-tab:hover:not([selected]) .tab-background {
+    background: var(--phantom-surface) !important;
+}
+
+.tabbrowser-tab .tab-text {
+    color: var(--phantom-dim) !important;
+    font-family: "JetBrainsMono Nerd Font", monospace !important;
+    font-size: 11px !important;
+}
+
+.tabbrowser-tab[selected] .tab-text {
+    color: var(--phantom-text) !important;
+}
+
+/* Tab close button */
+.tabbrowser-tab .tab-close-button {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.tabbrowser-tab:hover .tab-close-button {
+    opacity: 0.6;
+}
+
+/* ── Navigation Bar ─────────────────────────────────────────────── */
+#nav-bar {
+    background: var(--phantom-surface) !important;
+    border-bottom: 1px solid var(--phantom-border) !important;
+    padding: 2px 8px !important;
+}
+
+/* URL bar */
+#urlbar-background {
+    background: var(--phantom-bg) !important;
+    border: 1px solid var(--phantom-border) !important;
+    border-radius: 2px !important;
+    box-shadow: none !important;
+}
+
+#urlbar:not([focused]) #urlbar-background {
+    background: var(--phantom-bg) !important;
+}
+
+#urlbar[focused] #urlbar-background {
+    border-color: var(--phantom-green) !important;
+}
+
+#urlbar-input {
+    color: var(--phantom-text) !important;
+    font-family: "JetBrainsMono Nerd Font", monospace !important;
+    font-size: 12px !important;
+}
+
+/* ── Bookmarks Bar ──────────────────────────────────────────────── */
+#PersonalToolbar {
+    background: var(--phantom-bg) !important;
+    border-bottom: 1px solid var(--phantom-border) !important;
+    padding: 2px 4px !important;
+}
+
+toolbarbutton.bookmark-item {
+    color: var(--phantom-dim) !important;
+    font-size: 11px !important;
+}
+
+toolbarbutton.bookmark-item:hover {
+    color: var(--phantom-green) !important;
+    background: var(--phantom-surface) !important;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────────── */
+#sidebar-header {
+    background: var(--phantom-surface) !important;
+    border-bottom: 1px solid var(--phantom-border) !important;
+}
+
+#sidebar-box {
+    background: var(--phantom-bg) !important;
+}
+
+/* ── Findbar ────────────────────────────────────────────────────── */
+findbar {
+    background: var(--phantom-surface) !important;
+    border-top: 1px solid var(--phantom-border) !important;
+    color: var(--phantom-text) !important;
+}
+
+/* ── Context Menus ──────────────────────────────────────────────── */
+menupopup {
+    --panel-background: var(--phantom-surface) !important;
+    --panel-border-color: var(--phantom-border) !important;
+    --panel-color: var(--phantom-text) !important;
+}
+
+/* ── Misc Cleanup ───────────────────────────────────────────────── */
+/* Remove extra padding */
+#navigator-toolbox {
+    border: none !important;
+}
+
+/* Minimize button effects */
+toolbarbutton {
+    box-shadow: none !important;
+}
+
+/* Scrollbar */
+* {
+    scrollbar-color: var(--phantom-border) var(--phantom-bg) !important;
+    scrollbar-width: thin !important;
+}

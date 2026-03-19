@@ -1,0 +1,48 @@
+# ╔══════════════════════════════════════╗
+# ║  MAKO — Flat Minimal Notifications    ║
+# ║  Phantom Theme · Solid & Clean         ║
+# ╚══════════════════════════════════════╝
+
+font=JetBrainsMono Nerd Font 11
+background-color=#141414
+text-color=#d4d4d4
+border-color=#1e1e1e
+border-size=1
+border-radius=4
+padding=10,14
+margin=8
+width=340
+height=100
+icons=1
+icon-path=/usr/share/icons/Papirus-Dark
+max-icon-size=40
+
+max-visible=3
+default-timeout=4000
+ignore-timeout=0
+sort=-time
+layer=overlay
+anchor=top-right
+
+on-button-left=dismiss
+on-button-right=dismiss-all
+on-button-middle=invoke-default-action
+on-touch=dismiss
+
+group-by=app-name
+
+[urgency=low]
+border-color=#1e1e1e
+background-color=#0a0a0a
+text-color=#808080
+default-timeout=3000
+
+[urgency=normal]
+border-color=#1e1e1e
+background-color=#141414
+
+[urgency=critical]
+border-color=#BF616A
+background-color=#141414
+text-color=#d4d4d4
+default-timeout=0

@@ -1,0 +1,226 @@
+;; ╔══════════════════════════════════════════════════════════════╗
+;; ║  EWW — Virtual Touch Bar + System Dashboard                  ║
+;; ║  Phantom Theme · Extends physical Touch Bar with software    ║
+;; ╚══════════════════════════════════════════════════════════════╝
+;;
+;; The physical Touch Bar (tiny-dfr) handles:
+;;   ☀ Brightness, 🔊 Volume, ⏯ Media, 🔍 Search, 🎤 Mic, ⏰ Clock
+;;
+;; This Eww panel provides SOFTWARE extras the Touch Bar can't:
+;;   📊 Live metrics, 🖥 ML monitoring, ⚡ Quick toggles, 🎚 Sliders
+
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;; Variables — System Metrics (polled)
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(defpoll cpu_usage :interval "2s"
+  `awk '{printf "%.0f", $1*100/4}' /proc/loadavg`)
+
+(defpoll mem_usage :interval "3s"
+  `free -m | awk '/^Mem:/{printf "%.0f", $3/$2*100}'`)
+
+(defpoll gpu_freq :interval "5s"
+  `cat /sys/class/drm/card0/gt_cur_freq_mhz 2>/dev/null || echo "0"`)
+
+(defpoll cpu_temp :interval "5s"
+  `cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null | awk '{printf "%.0f", $1/1000}'`)
+
+(defpoll bat_capacity :interval "10s"
+  `cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo "100"`)
+
+(defpoll bat_status :interval "10s"
+  `cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo "Full"`)
+
+(defpoll net_ssid :interval "10s"
+  `nmcli -t -f active,ssid dev wifi | awk -F: '/^yes/{print $2}'`)
+
+(defpoll net_speed_down :interval "3s"
+  `awk 'NR>2{s+=$2}END{printf "%.1f", s/1024/1024}' /proc/net/dev 2>/dev/null || echo "0"`)
+
+(defpoll disk_usage :interval "30s"
+  `df -h / | awk 'NR==2{print $5}'`)
+
+(defpoll uptime_val :interval "60s"
+  `uptime -p | sed 's/up //'`)
+
+(defpoll current_time :interval "1s" `date +%H:%M:%S`)
+(defpoll current_date :interval "60s" `date +"%a, %b %d"`)
+
+;; ML Remote Server Metrics (SSH polling — only if reachable)
+(defpoll ml_gpu_load :interval "10s"
+  `ssh -o ConnectTimeout=2 ml-server 'nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null' 2>/dev/null || echo "-"`)
+
+(defpoll ml_gpu_mem :interval "10s"
+  `ssh -o ConnectTimeout=2 ml-server 'nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null' 2>/dev/null || echo "-,-"`)
+
+(defpoll ml_gpu_temp :interval "10s"
+  `ssh -o ConnectTimeout=2 ml-server 'nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null' 2>/dev/null || echo "-"`)
+
+;; Volume & Brightness
+(defpoll volume_val :interval "1s"
+  `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%.0f", $2*100}'`)
+
+(defpoll brightness_val :interval "2s"
+  `brightnessctl -m | awk -F, '{print $4}' | tr -d '%'`)
+
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;; Widget: ML Training Dashboard
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(defwidget ml-dashboard []
+  (box :class "ml-dashboard" :orientation "v" :space-evenly false :spacing 10
+    ;; Header
+    (box :class "ml-header" :orientation "h" :space-evenly false :spacing 8
+      (label :class "ml-icon" :text "󰊠")
+      (label :class "ml-title" :text "ML REMOTE")
+      (label :class "ml-status ${ml_gpu_load != '-' ? 'status-active' : 'status-idle'}"
+             :text "${ml_gpu_load != '-' ? 'ONLINE' : 'OFFLINE'}"))
+
+    ;; GPU Metrics (when connected)
+    (box :class "metric-row" :orientation "h" :space-evenly true :spacing 8
+      ;; GPU Load
+      (box :class "metric-circle" :orientation "v" :space-evenly false :spacing 4
+        (circular-progress :value "${ml_gpu_load != '-' ? ml_gpu_load : 0}"
+                           :thickness 5 :clockwise true
+                           :class "circle-prog circle-green")
+        (label :class "circle-label" :text "GPU"))
+
+      ;; CPU (local)
+      (box :class "metric-circle" :orientation "v" :space-evenly false :spacing 4
+        (circular-progress :value cpu_usage :thickness 5 :clockwise true
+                           :class "circle-prog circle-purple")
+        (label :class "circle-label" :text "CPU"))
+
+      ;; RAM (local)
+      (box :class "metric-circle" :orientation "v" :space-evenly false :spacing 4
+        (circular-progress :value mem_usage :thickness 5 :clockwise true
+                           :class "circle-prog circle-blue")
+        (label :class "circle-label" :text "MEM")))
+
+    ;; Stats Row
+    (box :class "ml-stats" :orientation "h" :space-evenly true :spacing 6
+      (box :class "metric-small" :orientation "v" :space-evenly false
+        (label :class "metric-icon icon-temp" :text "")
+        (label :class "metric-label-sm" :text "TEMP")
+        (label :class "metric-value-sm" :text "${cpu_temp}°C"))
+      (box :class "metric-small" :orientation "v" :space-evenly false
+        (label :class "metric-icon icon-gpu" :text "󰢮")
+        (label :class "metric-label-sm" :text "iGPU")
+        (label :class "metric-value-sm" :text "${gpu_freq}MHz"))
+      (box :class "metric-small" :orientation "v" :space-evenly false
+        (label :class "metric-icon icon-disk" :text "󰋊")
+        (label :class "metric-label-sm" :text "DISK")
+        (label :class "metric-value-sm" :text "${disk_usage}")))))
+
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;; Widget: Quick Controls (Software Sliders)
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(defwidget quick-controls []
+  (box :class "quick-controls" :orientation "h" :space-evenly false :spacing 16
+    ;; Brightness
+    (box :orientation "h" :space-evenly false :spacing 6
+      (label :class "control-icon" :text "󰃠")
+      (scale :class "control-slider" :min 0 :max 100
+             :value brightness_val
+             :onchange "brightnessctl set {}%")
+      (label :class "control-value" :text "${brightness_val}%"))
+
+    ;; Volume
+    (box :orientation "h" :space-evenly false :spacing 6
+      (label :class "control-icon" :text "󰕾")
+      (scale :class "control-slider" :min 0 :max 100
+             :value volume_val
+             :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%")
+      (label :class "control-value" :text "${volume_val}%"))
+
+    ;; Battery
+    (box :orientation "h" :space-evenly false :spacing 6
+      (label :class "control-icon" :text "${bat_status == 'Charging' ? '󰂄' : '󰁹'}")
+      (label :class "control-value" :text "${bat_capacity}%"))))
+
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;; Widget: System Info Panel
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(defwidget sys-info []
+  (box :class "sys-info" :orientation "v" :space-evenly false :spacing 8
+    ;; Header
+    (box :orientation "h" :space-evenly false :spacing 8
+      (label :class "sys-icon" :text "")
+      (label :class "sys-title" :text "SYSTEM"))
+
+    ;; CPU bar
+    (box :class "sys-row" :orientation "h" :space-evenly false :spacing 8
+      (label :class "sys-label" :text "CPU")
+      (progress :class "sys-bar bar-green" :value cpu_usage)
+      (label :class "sys-val" :text "${cpu_usage}%"))
+
+    ;; RAM bar
+    (box :class "sys-row" :orientation "h" :space-evenly false :spacing 8
+      (label :class "sys-label" :text "MEM")
+      (progress :class "sys-bar bar-purple" :value mem_usage)
+      (label :class "sys-val" :text "${mem_usage}%"))
+
+    ;; Disk
+    (box :class "sys-row" :orientation "h" :space-evenly false :spacing 8
+      (label :class "sys-label" :text "DSK")
+      (label :class "sys-val" :text "${disk_usage}"))
+
+    ;; Network
+    (box :class "sys-row" :orientation "h" :space-evenly false :spacing 8
+      (label :class "sys-label" :text "NET")
+      (label :class "sys-val" :text "${net_ssid != '' ? net_ssid : 'disconnected'}"))
+
+    ;; Uptime
+    (box :class "sys-row" :orientation "h" :space-evenly false :spacing 8
+      (label :class "sys-label" :text "UP")
+      (label :class "sys-val" :text "${uptime_val}"))))
+
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;; Widget: Clock
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(defwidget clock-widget []
+  (box :class "clock-widget" :orientation "v" :space-evenly false :spacing 4
+    (label :class "clock-time" :text current_time)
+    (label :class "clock-date" :text current_date)))
+
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+;; Windows — Positioned as Bento Grid panels
+;; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+;; ML Dashboard — right half, top
+(defwindow ml-panel
+  :monitor 0
+  :geometry (geometry :x "58%" :y "8%" :width "380px" :height "260px"
+                      :anchor "top left")
+  :stacking "bg"
+  :exclusive false
+  :focusable false
+  (ml-dashboard))
+
+;; Quick Controls — bottom strip (like a virtual Touch Bar)
+(defwindow controls-bar
+  :monitor 0
+  :geometry (geometry :x "0%" :y "0%" :width "100%" :height "38px"
+                      :anchor "bottom center")
+  :stacking "overlay"
+  :exclusive true
+  :focusable false
+  (quick-controls))
+
+;; System Info — right side panel
+(defwindow sys-panel
+  :monitor 0
+  :geometry (geometry :x "58%" :y "40%" :width "380px" :height "240px"
+                      :anchor "top left")
+  :stacking "bg"
+  :exclusive false
+  :focusable false
+  (sys-info))
+
+;; Clock — bottom right
+(defwindow clock-panel
+  :monitor 0
+  :geometry (geometry :x "-8px" :y "-8px" :width "200px" :height "100px"
+                      :anchor "bottom right")
+  :stacking "bg"
+  :exclusive false
+  :focusable false
+  (clock-widget))

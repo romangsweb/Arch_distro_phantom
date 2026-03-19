@@ -1,0 +1,11 @@
+# ╔══════════════════════════════════════╗
+# ║  GREETD — Login Manager Config        ║
+# ║  TUIGreet · Phantom Theme              ║
+# ╚══════════════════════════════════════╝
+
+[terminal]
+vt = 1
+
+[default_session]
+command = "tuigreet --time --time-format '%H:%M · %A, %B %d' --greeting 'PHANTOM' --remember --remember-session --asterisks --asterisks-char '·' --cmd Hyprland --theme 'border=green;text=white;prompt=green;time=gray;action=purple;button=green;container=black;input=white'"
+user = "greeter"

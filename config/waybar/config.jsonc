@@ -1,0 +1,240 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  WAYBAR — Phantom Flat Minimal (Green/Purple)                 ║
+// ║  MacBook Pro A1706 — System Monitoring Dashboard             ║
+// ╚══════════════════════════════════════════════════════════════╝
+{
+    "layer": "top",
+    "position": "top",
+    "height": 40,
+    "margin-top": 6,
+    "margin-left": 14,
+    "margin-right": 14,
+    "spacing": 0,
+    "reload_style_on_change": true,
+
+    // ── Module Layout ──────────────────────────────────────────
+    "modules-left": [
+        "custom/l_end",
+        "custom/arch_logo",
+        "hyprland/workspaces",
+        "custom/separator",
+        "hyprland/window",
+        "custom/r_end"
+    ],
+    "modules-center": [
+        "custom/l_end",
+        "clock",
+        "custom/r_end"
+    ],
+    "modules-right": [
+        "custom/l_end",
+        "cpu",
+        "custom/separator",
+        "memory",
+        "custom/separator",
+        "temperature",
+        "custom/r_end",
+        "custom/spacer",
+        "custom/l_end",
+        "custom/gpu",
+        "custom/separator",
+        "battery",
+        "custom/separator",
+        "network",
+        "custom/separator",
+        "pulseaudio",
+        "custom/separator",
+        "custom/docker",
+        "custom/separator",
+        "custom/updates",
+        "custom/separator",
+        "tray",
+        "custom/r_end"
+    ],
+
+    // ── Capsule Endpoints ──────────────────────────────────────
+    "custom/l_end": {
+        "format": " ",
+        "tooltip": false
+    },
+    "custom/r_end": {
+        "format": " ",
+        "tooltip": false
+    },
+    "custom/separator": {
+        "format": "│",
+        "tooltip": false
+    },
+    "custom/spacer": {
+        "format": " ",
+        "tooltip": false
+    },
+    "custom/arch_logo": {
+        "format": " ",
+        "tooltip": true,
+        "tooltip-format": "Arch Linux — Phantom Rice"
+    },
+
+    // ── Workspaces ─────────────────────────────────────────────
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "󰲠",
+            "2": "󰲢",
+            "3": "󰲤",
+            "4": "󰲦",
+            "5": "󰲨",
+            "6": "󰲪",
+            "7": "󰲬",
+            "8": "󰲮",
+            "9": "󰲰",
+            "urgent": "",
+            "active": "",
+            "default": ""
+        },
+        "on-click": "activate",
+        "sort-by-number": true,
+        "all-outputs": true,
+        "active-only": false
+    },
+
+    // ── Active Window ──────────────────────────────────────────
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 40,
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "󰈹  $1",
+            "(.*) - kitty": "  $1",
+            "ranger(.*)": "  ranger$1",
+            "nvim (.*)": "  $1",
+            "": "  Desktop"
+        }
+    },
+
+    // ── Clock ──────────────────────────────────────────────────
+    "clock": {
+        "format": "  {:%H:%M}",
+        "format-alt": "  {:%A, %B %d · %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#7EC8A0'><b>{}</b></span>",
+                "days": "<span color='#999999'>{}</span>",
+                "weeks": "<span color='#555555'>W{}</span>",
+                "weekdays": "<span color='#B48EAD'>{}</span>",
+                "today": "<span color='#7EC8A0'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+
+    // ── CPU ────────────────────────────────────────────────────
+    "cpu": {
+        "format": "  {usage}%",
+        "format-alt": "  {avg_frequency}GHz · {usage}%",
+        "tooltip": true,
+        "tooltip-format": "CPU Usage: {usage}%\nLoad: {load}\n\n{usage0}% | {usage1}% | {usage2}% | {usage3}%",
+        "interval": 2,
+        "on-click": "kitty -e btop"
+    },
+
+    // ── Memory ─────────────────────────────────────────────────
+    "memory": {
+        "format": "  {percentage}%",
+        "format-alt": "  {used:0.1f}G / {total:0.1f}G",
+        "tooltip": true,
+        "tooltip-format": "RAM: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB ({swapPercentage}%)",
+        "interval": 3,
+        "on-click": "kitty -e btop"
+    },
+
+    // ── Temperature ────────────────────────────────────────────
+    "temperature": {
+        "thermal-zone": 0,
+        "critical-threshold": 90,
+        "format": " {temperatureC}°C",
+        "format-critical": " {temperatureC}°C",
+        "tooltip": true,
+        "tooltip-format": "Temperature: {temperatureC}°C / {temperatureF}°F",
+        "interval": 5
+    },
+
+    // ── GPU (Intel Iris 550) ───────────────────────────────────
+    "custom/gpu": {
+        "exec": "cat /sys/class/drm/card0/gt_cur_freq_mhz 2>/dev/null || echo 'N/A'",
+        "format": "󰢮  {}MHz",
+        "interval": 5,
+        "tooltip": true,
+        "tooltip-format": "Intel Iris 550 — Current Frequency",
+        "on-click": "kitty -e intel_gpu_top"
+    },
+
+    // ── Battery ────────────────────────────────────────────────
+    "battery": {
+        "states": {
+            "full": 100,
+            "good": 80,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "󰂄  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-full": "  Full",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "tooltip-format": "{capacity}%  ·  {timeTo}  ·  {power}W",
+        "interval": 10
+    },
+
+    // ── Network (Broadcom Wi-Fi) ───────────────────────────────
+    "network": {
+        "interface": "wlan0",
+        "format-wifi": "  {essid}",
+        "format-ethernet": "󰈀  {ipaddr}",
+        "format-disconnected": "󰤮  Off",
+        "format-alt": "  {signalStrength}% · {bandwidthUpBytes}↑ {bandwidthDownBytes}↓",
+        "tooltip-format": "Interface: {ifname}\nIP: {ipaddr}/{cidr}\nGateway: {gwaddr}\nSignal: {signalStrength}%\nFreq: {frequency}MHz\n↑ {bandwidthUpBytes}  ↓ {bandwidthDownBytes}",
+        "interval": 5,
+        "on-click": "kitty -e nmtui"
+    },
+
+    // ── Audio ──────────────────────────────────────────────────
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "  {volume}%",
+        "format-muted": "  Mute",
+        "format-icons": {
+            "headphone": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
+        "tooltip-format": "{desc}\nVolume: {volume}%"
+    },
+
+    // ── System Tray ────────────────────────────────────────────
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+
+    // ── Docker Containers ────────────────────────────────────────
+    "custom/docker": {
+        "exec": "~/.config/waybar/scripts/docker.sh",
+        "return-type": "json",
+        "interval": 10,
+        "on-click": "kitty -e lazydocker"
+    },
+
+    // ── System Updates ──────────────────────────────────────────
+    "custom/updates": {
+        "exec": "~/.config/waybar/scripts/updates.sh",
+        "return-type": "json",
+        "interval": 3600,
+        "on-click": "kitty -e paru -Syu"
+    }
+}

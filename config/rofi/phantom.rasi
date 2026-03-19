@@ -1,0 +1,145 @@
+/* ╔══════════════════════════════════════════════════════════════╗ */
+/* ║  ROFI THEME — Phantom (Flat Minimal · Green/Purple)           ║ */
+/* ╚══════════════════════════════════════════════════════════════╝ */
+
+* {
+    bg:             #0a0a0a;
+    bg-surface:     #141414;
+    bg-selected:    #1a1a1a;
+    fg:             #d4d4d4;
+    fg-dim:         #555555;
+    accent:         #7EC8A0;
+    secondary:      #B48EAD;
+    urgent:         #BF616A;
+    border-col:     #1e1e1e;
+
+    font:           "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    width:              560px;
+    transparency:       "real";
+    background-color:   @bg;
+    border:             1px solid;
+    border-color:       @border-col;
+    border-radius:      4px;
+    padding:            0;
+    location:           center;
+    anchor:             center;
+}
+
+mainbox {
+    background-color:   transparent;
+    children:           [ inputbar, message, listview, mode-switcher ];
+    spacing:            0;
+}
+
+inputbar {
+    background-color:   @bg-surface;
+    text-color:         @fg;
+    padding:            12px 16px;
+    spacing:            8px;
+    children:           [ prompt, entry ];
+    border:             0 0 1px 0;
+    border-color:       @border-col;
+}
+
+prompt {
+    background-color:   transparent;
+    text-color:         @accent;
+    padding:            4px 0;
+    font:               "JetBrainsMono Nerd Font Bold 11";
+}
+
+entry {
+    background-color:   transparent;
+    text-color:         @fg;
+    placeholder:        "type to search...";
+    placeholder-color:  @fg-dim;
+    padding:            4px;
+    cursor:             text;
+}
+
+message {
+    background-color:   transparent;
+    border:             0;
+    padding:            4px 16px;
+}
+
+textbox {
+    background-color:   transparent;
+    text-color:         @fg-dim;
+}
+
+listview {
+    background-color:   transparent;
+    columns:            1;
+    lines:              8;
+    spacing:            0;
+    cycle:              true;
+    dynamic:            true;
+    scrollbar:          false;
+    padding:            4px 0;
+    fixed-height:       true;
+}
+
+element {
+    background-color:   transparent;
+    text-color:         @fg;
+    padding:            8px 16px;
+    spacing:            10px;
+    cursor:             pointer;
+}
+
+element selected.normal {
+    background-color:   @bg-selected;
+    text-color:         @accent;
+    border:             0 0 0 2px;
+    border-color:       @accent;
+}
+
+element normal.active {
+    text-color:         @secondary;
+}
+
+element alternate.normal {
+    background-color:   transparent;
+}
+
+element-icon {
+    size:               20px;
+    background-color:   transparent;
+    cursor:             inherit;
+}
+
+element-text {
+    background-color:   transparent;
+    text-color:         inherit;
+    cursor:             inherit;
+    vertical-align:     0.5;
+    highlight:          bold;
+}
+
+mode-switcher {
+    background-color:   @bg-surface;
+    padding:            6px 12px;
+    spacing:            6px;
+    border:             1px 0 0 0;
+    border-color:       @border-col;
+}
+
+button {
+    background-color:   transparent;
+    text-color:         @fg-dim;
+    padding:            6px 12px;
+    border-radius:      2px;
+    cursor:             pointer;
+    font:               "JetBrainsMono Nerd Font 10";
+}
+
+button selected {
+    background-color:   @bg-selected;
+    text-color:         @accent;
+    border:             1px solid;
+    border-color:       @border-col;
+}

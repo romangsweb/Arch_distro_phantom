@@ -1,0 +1,137 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║  STARSHIP PROMPT — Phantom (Flat · Green/Purple)              ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+format = """
+$os\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$rust\
+$golang\
+$docker_context\
+$kubernetes\
+$fill\
+$cmd_duration\
+$jobs\
+$status\
+$line_break\
+$character"""
+
+palette = "phantom"
+
+[palettes.phantom]
+green = "#7EC8A0"
+purple = "#B48EAD"
+blue = "#81A1C1"
+red = "#BF616A"
+yellow = "#D4A76A"
+text = "#d4d4d4"
+dim = "#555555"
+surface = "#1a1a1a"
+
+[os]
+disabled = false
+style = "fg:#7EC8A0"
+format = "[$symbol ]($style)"
+
+[os.symbols]
+Arch = "󰣇"
+Linux = ""
+
+[directory]
+style = "fg:#d4d4d4 bold"
+format = "[$path]($style)[$read_only]($read_only_style) "
+truncation_length = 3
+truncation_symbol = "…/"
+home_symbol = "~"
+read_only = " 󰌾"
+read_only_style = "fg:#BF616A"
+
+[directory.substitutions]
+"Documents" = "󰈙"
+"Downloads" = ""
+"Projects" = ""
+".config" = ""
+
+[git_branch]
+symbol = ""
+style = "fg:#7EC8A0"
+format = "[$symbol $branch(:$remote_branch)]($style) "
+truncation_length = 24
+
+[git_status]
+style = "fg:#B48EAD"
+format = "[$all_status$ahead_behind]($style)"
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "*"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»"
+deleted = "✘"
+
+[python]
+symbol = ""
+style = "fg:#D4A76A"
+format = "[$symbol $pyenv_prefix($version )( \\($virtualenv\\))]($style) "
+python_binary = ["python3", "python"]
+detect_extensions = ["py"]
+
+[nodejs]
+symbol = ""
+style = "fg:#7EC8A0"
+format = "[$symbol $version]($style) "
+detect_extensions = ["js", "ts"]
+
+[rust]
+symbol = "󱘗"
+style = "fg:#BF616A"
+format = "[$symbol $version]($style) "
+
+[golang]
+symbol = "󰟓"
+style = "fg:#81A1C1"
+format = "[$symbol $version]($style) "
+
+[docker_context]
+symbol = ""
+style = "fg:#81A1C1"
+format = "[$symbol $context]($style) "
+only_with_files = true
+
+[kubernetes]
+symbol = "☸"
+style = "fg:#B48EAD"
+format = "[$symbol $context(:$namespace)]($style) "
+disabled = false
+
+[fill]
+symbol = " "
+
+[cmd_duration]
+min_time = 2_000
+style = "fg:#555555"
+format = "[$duration]($style) "
+show_milliseconds = false
+
+[jobs]
+symbol = "+"
+style = "fg:#B48EAD"
+threshold = 1
+
+[status]
+disabled = false
+symbol = "✖"
+style = "fg:#BF616A"
+format = "[$symbol$status]($style) "
+
+[character]
+success_symbol = "[❯](fg:#7EC8A0)"
+error_symbol = "[❯](fg:#BF616A)"
+vimcmd_symbol = "[❮](fg:#B48EAD)"
